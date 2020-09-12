@@ -1,3 +1,5 @@
+const randomDarkColor = require("./randomDarkColor");
+
 const users = [];
 
 const addUser = ({ id, username, room }) => {
@@ -25,7 +27,7 @@ const addUser = ({ id, username, room }) => {
   }
 
   // Store user
-  const user = { id, username, room };
+  const user = { id, username, room, color: randomDarkColor() };
   users.push(user);
 
   return { user };

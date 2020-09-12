@@ -38,12 +38,12 @@ io.on("connection", (socket) => {
 
     socket.join(user.room);
 
-    socket.emit("message", generateMessage("Admin", "Welcome!"));
+    socket.emit("message", generateMessage("Admin", "Welcome!", user.color));
     socket.broadcast
       .to(user.room)
       .emit(
         "message",
-        generateMessage("Admin", `${user.username} has joined!`)
+        generateMessage("Admin", `${user.username} has joined!`, user.color)
       );
     io.to(user.room).emit("roomData", {
       room: user.room,
@@ -61,7 +61,7 @@ io.on("connection", (socket) => {
       return callback("Profanity not allowed!");
     }
 
-    io.to(user.room).emit("message", generateMessage(user.username, message));
+    io.to(user.room).emit("message", generateMessage(user.username, message, user.color));
     callback();
   });
 
@@ -72,7 +72,8 @@ io.on("connection", (socket) => {
       "locationMessage",
       generateLocationMessage(
         user.username,
-        `https://google.com/maps?q=${location.latitude},${location.longitude}`
+        `https://google.com/maps?q=${location.latitude},${location.longitude}`,
+        user.color
       )
     );
     callback();
@@ -83,7 +84,7 @@ io.on("connection", (socket) => {
     if (user) {
       io.to(user.room).emit(
         "message",
-        generateMessage("Admin", `${user.username} has left!`)
+        generateMessage("Admin", `${user.username} has left!`, user.color)
       );
       console.log('GG', getUsersInRoom(user.room));
       io.to(user.room).emit("roomData", {
